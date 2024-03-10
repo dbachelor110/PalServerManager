@@ -324,8 +324,7 @@ WantedBy=multi-user.target""")
         self.start()
 
     def getSettings(self):
-        temp = self._settings
-        return temp
+        return self._getSettings()
     
     def getEnvVars(self):
         temp = self._environmentVars
