@@ -1,0 +1,19 @@
+.card {
+    width: 80%;
+    min-width: 400px;
+    margin: auto;
+    padding: 0 2rem;
+}
+
+.property {
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.property .key {
+    width: 50%;
+}
+
+.property .value {
+    width: 50%;
+}

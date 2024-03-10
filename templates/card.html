@@ -1,0 +1,5 @@
+<div id="{{ name }}" class="card">
+    {% for key, value in propertys.items() %}
+    <div class="property" key="{{ key }}" value="{{ value }}">{{ value }}</div>
+    {% endfor %}
+</div>

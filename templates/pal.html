@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ServerM</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='./css/main.css') }}{{ ver }}" />
+</head>
+<body>
+    <div id="{{ name }}" class="card">
+        <h1>{{ name }}</h1>
+        {% for key, value in propertys.items() %}
+        <div class="property" key="{{ key }}" value="{{ value }}">
+            <div class="key">{{ key }}</div>
+            <div class="value">{{ value }}</div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+<footer>
+</footer>
+</html>
