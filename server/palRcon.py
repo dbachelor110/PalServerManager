@@ -137,14 +137,15 @@ class BasePal:
 
     def initialConfig(self):
         self._getConfig()
-        self._getSettings()
     
     def _upDateRcon(self):
         self.RCON.config(self._settings['PublicIP'],self._settings['RCONPort'],self._settings['AdminPassword'])
 
     def _getSettings(self):
         """from .ini file get optionsettings and return as dict"""
+        LOGGER.debug(f'Settings path: {self.getSettingsIniPath()}')
         self._ConfigParser.read(self.getSettingsIniPath(), encoding='utf-8')
+        LOGGER.debug(f'sections: {self._ConfigParser.sections()}')
         preConfig = self._ConfigParser["/Script/Pal.PalGameWorldSettings"]["optionsettings"]
         config = self._iniToDict(preConfig)
         self._settings = config
@@ -335,7 +336,7 @@ class checkServer(object):
         self.f = f
     
     def __call__(self, *args, **kwargs):
-        PalM.getServer()
+        PalM.getServer().getSettings()
         return self.f(*args, **kwargs)
     
 class PalM:
@@ -364,19 +365,17 @@ class PalM:
         PalM._SERVER._updatePalService()
         return PalM._SERVER._settings
     
-    @checkServer
     def getConfig():
         """get PalM._SERVER._environmentVars"""
-        return PalM._SERVER.getEnvVars()
+        return PalM.getServer().getEnvVars()
     
-    @checkServer
     def setConfig(**kargs):
         """set kargs to PalM._SERVER._environmentVars"""
-        for key in PalM._SERVER._environmentVars.keys():
+        for key in PalM.getServer()._environmentVars.keys():
             if key in kargs:
-                PalM._SERVER._environmentVars[key] = kargs[key]
-        PalM._SERVER._saveConfig(**PalM._SERVER._environmentVars)
-        return PalM._SERVER.getEnvVars()
+                PalM.getServer()._environmentVars[key] = kargs[key]
+        PalM.getServer()._saveConfig(**PalM._SERVER._environmentVars)
+        return PalM.getServer().getEnvVars()
 
     @checkServer
     def start():
