@@ -297,7 +297,13 @@ WantedBy=multi-user.target""")
         result = subprocess.run(f'sudo systemctl status {self._environmentVars["palservicename"]}', shell=True, capture_output=True, text=True)
         LOGGER.log(DETAIL,result)
         LOGGER.info('status successful')
-        return result
+        result_dict = {
+            'args': result.args,
+            'returncode': result.returncode,
+            'stdout': result.stdout,
+            'stderr': result.stderr,
+        }
+        return result_dict
 
     def start(self):
         result = subprocess.run(f'sudo systemctl start {self._environmentVars["palservicename"]}', shell=True, capture_output=True, text=True)
@@ -321,7 +327,8 @@ WantedBy=multi-user.target""")
         self.stop()
         result = subprocess.run(f'{self._environmentVars["steamroot"]}/steamcmd.sh +login anonymous +app_update 2394010 validate +quit',
                                 shell=True, capture_output=True, text=True)
-        LOGGER.info('updating...')
+        LOGGER.info(f'stdout: {result.stdout}')
+        LOGGER.info(f'stderr: {result.stderr}')
         self.start()
 
     def getSettings(self):
