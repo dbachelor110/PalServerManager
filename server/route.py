@@ -523,13 +523,18 @@ def cnfigSet():
       type: str
       required: false
       description: Name of Pal World server service
+    - name: settingsrelatepath   
+      in: query
+      type: str
+      required: false
+      description: settings file relate path from steam root
     responses:
       401:
         description: Unauthorized error
       200:
         description: success save Config to System, return Config.
     """
-    keys = ['steamroot', 'palservicename']
+    keys = ['steamroot', 'palservicename','settingsrelatepath']
     configs = {}
     for key in keys:
         temp = request.values.get(key, type=str)

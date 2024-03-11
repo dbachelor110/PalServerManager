@@ -114,7 +114,6 @@ class RCON:
 class BasePal:
     def __init__(self) -> None:
         # self.settingsRelatePath = 'steamapps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini'
-        self.settingsRelatePath = 'server/pal.ini'
         self.configIniPath = 'config.ini'
         self._settings = {}
         self.hotSettings = ['ServerName','CoopPlayerMaxNum','ServerPassword','PublicPort','PublicIP','RCONEnabled','RCONPort','AdminPassword']
@@ -127,7 +126,7 @@ class BasePal:
         pass
 
     def getSettingsIniPath(self):
-        return f'{self._environmentVars["steamroot"]}/{self.settingsRelatePath}'
+        return f'{self._environmentVars["steamroot"]}/{self._environmentVars["settingsrelatepath"]}'
 
 
     class Setting:
@@ -170,6 +169,7 @@ class BasePal:
             self._ConfigParser.add_section('environment')
             self._ConfigParser.set('environment','steamroot','~/steam')
             self._ConfigParser.set('environment','palservicename','palServer')
+            self._ConfigParser.set('environment','settingsrelatepath','steamapps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini')
             with open(self.configIniPath, 'w', encoding='utf-8') as configfile:
                 self._ConfigParser.write(configfile)
         temp = {}
