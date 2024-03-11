@@ -127,6 +127,15 @@ class BasePal:
 
     def getSettingsIniPath(self):
         return f'{self._environmentVars["steamroot"]}/{self._environmentVars["settingsrelatepath"]}'
+    
+    def completedProcessToDict(self,result:subprocess.CompletedProcess):
+        result_dict = {
+            'args': result.args,
+            'returncode': result.returncode,
+            'stdout': result.stdout,
+            'stderr': result.stderr,
+        }
+        return result_dict
 
 
     class Setting:
@@ -285,25 +294,19 @@ WantedBy=multi-user.target""")
         LOGGER.log(DETAIL,result)
         result = subprocess.run(f'sudo systemctl daemon-reload', shell=True, capture_output=True, text=True)
         LOGGER.log(DETAIL,result)
-        return result
+        return self.completedProcessToDict(result)
     
     def catPalService(self):
         filePath = f'/etc/systemd/system/{self._environmentVars["palservicename"]}.service'
         result = subprocess.run(f'cat {filePath}', shell=True, capture_output=True, text=True)
         LOGGER.log(DETAIL,result)
-        return result
+        return self.completedProcessToDict(result)
 
     def status(self):
         result = subprocess.run(f'sudo systemctl status {self._environmentVars["palservicename"]}', shell=True, capture_output=True, text=True)
         LOGGER.log(DETAIL,result)
         LOGGER.info('status successful')
-        result_dict = {
-            'args': result.args,
-            'returncode': result.returncode,
-            'stdout': result.stdout,
-            'stderr': result.stderr,
-        }
-        return result_dict
+        return self.completedProcessToDict(result)
 
     def start(self):
         result = subprocess.run(f'sudo systemctl start {self._environmentVars["palservicename"]}', shell=True, capture_output=True, text=True)
