@@ -79,8 +79,10 @@ def changePassword():
         example: "{'message':'admin change password success.'}"
     """
     oldpassword = request.values.get('oldpassword')
-    userDaya:userM.User = userM.User.get(current_user.id)
-    if userDaya.PASSWORD != oldpassword: return jsonifyPlus({'message':f'user: {id} old password error.'}),403
+    ID = current_user.get_id()
+    server.logger.debug(f'user:{ID}; oldPassw:{oldpassword}')
+    userDaya:userM.User = userM.User.get(ID)
+    if userDaya.PASSWORD != oldpassword: return jsonifyPlus({'message':f'user: {userDaya.ID} old password error.'}),403
     newpassword = request.values.get('newpassword')
     userDaya.set(PASSWORD=newpassword)
     return jsonifyPlus({'message':f'{id} change password success.'})

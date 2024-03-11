@@ -113,7 +113,8 @@ class RCON:
             return False
 class BasePal:
     def __init__(self) -> None:
-        self.settingsRelatePath = 'steamapps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini'
+        # self.settingsRelatePath = 'steamapps/common/PalServer/Pal/Saved/Config/LinuxServer/PalWorldSettings.ini'
+        self.settingsRelatePath = 'server/pal.ini'
         self.configIniPath = 'config.ini'
         self._settings = {}
         self.hotSettings = ['ServerName','CoopPlayerMaxNum','ServerPassword','PublicPort','PublicIP','RCONEnabled','RCONPort','AdminPassword']
