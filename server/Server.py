@@ -33,48 +33,44 @@ login_manager.session_protection = "strong"
 login_manager.login_view = 'login'
 login_manager.login_message = 'please login.'
 
-# sample users data  
-users = userM.User.USERS
-
-  
 class User(UserMixin):
     """簡單繼承，以利後續擴充。
     
     from -> https://hackmd.io/@shaoeChen/ryvr_ly8f?type=view"""
-    def __init__(self) -> None:
+    def __init__(self,ID,NAME,GROUP,**kargs) -> None:
         super().__init__()
-        self.id = None
-        self.name = None
-    
-    pass
+        self.id = ID
+        self.name = NAME
+        self.group = GROUP
 
+def loadUser(id):
+    """使用 id 當作 key ，
+    
+    找不到 key 回傳 None 。"""
+    userData = userM.User.get(id)
+    if not userData: return
+
+    user = User(**userData.__dict__)
+    return user
+
+def paswordCheck(id, passwprd):
+    userData:userM.User = userM.User.get(id)
+    return userData.PASSWORD == passwprd
 
 @login_manager.user_loader  
 def user_loader(email):  
     """  
  設置二： 透過這邊的設置讓flask_login可以隨時取到目前的使用者id   
  :param email:官網此例將email當id使用，賦值給予user.id    
- """   
-    if email not in users:  
-        return
-    data = users[email]
-    user = User()
-    user.id = data.ID
-    user.name = data.NAME
-    return user
+ """
+    return loadUser(email)
 
 @login_manager.request_loader
 def request_loader(request):
     id = request.values.get('email')
-    if id not in users:
-        return
-
-    user = User()
-    user.id = id
-
-    # DO NOT ever store passwords in plaintext and always compare password
-    # hashes using constant-time comparison!
-    user.is_authenticated = (request.values.get('password') == users[id].PASSWORD)
+    password = request.values.get('password')
+    user = loadUser(id)
+    user.is_authenticated = (paswordCheck(id,password))
 
     return user
 
@@ -174,4 +170,3 @@ def add_header(response):
     response.headers['Cache-Control'] = 'no-cache'
     response.headers['charset'] = 'utf-8'
     return response
-    
